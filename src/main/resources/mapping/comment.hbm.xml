@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field">
+  <class dynamic-update="true" mutable="true" name="com.hxline.threadservice.domain.Comment" table="TABLE_COMMENT">
+    <id column="COMMENT_ID" name="id"/>
+    <property column="COMMENT" length="255" name="comment"/>
+  </class>
+</hibernate-mapping>

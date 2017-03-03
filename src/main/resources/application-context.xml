@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans  
+    xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
+  
+  
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" ></property>
+        <property name="url" value="jdbc:mysql://localhost/db_thread" ></property>  
+        <property name="username" value="root" ></property>
+        <property name="password" value="" ></property>
+    </bean>  
+      
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+          
+        <property name="mappingResources">  
+            <list>
+                <value>mapping/thread.hbm.xml</value>
+                <value>mapping/comment.hbm.xml</value>
+            </list>  
+        </property>  
+          
+        <property name="hibernateProperties">
+            <props>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.jdbc.batch_size">1000</prop>
+            </props>  
+        </property>  
+    </bean>  
+    
+    <bean id="threadHibernate" class="com.hxline.threadservice.hibernate.ThreadHibernate">  
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+</beans>

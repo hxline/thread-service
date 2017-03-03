@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-access="field">
+  <class dynamic-update="true" mutable="true" name="com.hxline.threadservice.domain.Thread" table="TABLE_THREAD">
+    <id column="THREAD_ID" name="id"/>
+    <property column="THREAD_TOPIC" length="255" name="threadTopic"/>
+    <property column="THREAD_DESCRIPTION" length="255" name="threadDescription"/>
+    <set cascade="all" lazy="false" name="comments">
+      <key column="THREAD_ID" foreign-key="THREAD_ID_FK"/>
+      <one-to-many class="com.hxline.threadservice.domain.Comment"/>
+    </set>
+  </class>
+</hibernate-mapping>
