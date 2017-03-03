@@ -66,6 +66,7 @@ public class ThreadService implements ThreadInterface{
                     response = restTemplate.getForObject(gateway_url + "/thumb-service/get/" + thread.getId(), Thumb.class);
                     
                 } catch (Exception e) {
+                    System.out.println(e.getCause());
                     response = new Thumb();
                 }
                 System.out.println(response.getThreadId());
