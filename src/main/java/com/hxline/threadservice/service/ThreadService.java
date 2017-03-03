@@ -64,11 +64,12 @@ public class ThreadService implements ThreadInterface{
             for (Thread thread : threads) {
                 try {
                     response = restTemplate.getForObject(gateway_url + "/thumb-service/get/" + thread.getId(), Thumb.class);
-                    System.out.println(response.getThreadId());
+                    
                 } catch (Exception e) {
                     response = new Thumb();
                 }
-                
+                System.out.println(response.getThreadId());
+                System.out.println(gateway_url);
                 threadDTOs.add(new ThreadDTO(
                         thread.getId(),
                         thread.getThreadTopic(),
