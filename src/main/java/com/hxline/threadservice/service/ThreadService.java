@@ -17,6 +17,7 @@ import java.util.UUID;
 //import org.apache.commons.codec.binary.Base64;
 //import org.apache.http.HttpHost;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -40,7 +41,8 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class ThreadService implements ThreadInterface{
 
-    private String gateway_url = "http://25.6.83.137:8080";
+    @Value("${info.thumb}")
+    private String gateway_url;
     
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
     @HystrixCommand(
