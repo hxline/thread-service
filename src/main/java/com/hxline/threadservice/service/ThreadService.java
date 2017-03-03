@@ -63,10 +63,10 @@ public class ThreadService implements ThreadInterface{
             Thumb response = new Thumb();
             for (Thread thread : threads) {
                 try {
-                    response = restTemplate.getForObject(gateway_url + "/thumb-service/get/" + thread.getId(), Thumb.class);
+                    response = restTemplate.getForObject("https://hxline-gateway.herokuapp.com/thumb-service/get/" + thread.getId(), Thumb.class);
                     
                 } catch (Exception e) {
-                    System.out.println(e.getCause());
+                    System.out.println(e);
                     response = new Thumb();
                 }
                 System.out.println(response.getThreadId());
