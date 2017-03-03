@@ -41,7 +41,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class ThreadService implements ThreadInterface{
 
-    @Value("${info.thumb}")
+    @Value("${info.gateway}")
     private String gateway_url;
     
     @RequestMapping(value = "/getall", method = RequestMethod.GET)

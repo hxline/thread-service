@@ -38,7 +38,7 @@ eureka:
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
 info:
-    thumb: ${THUMB_ADDRESS}
+    gateway: ${GATEWAY_ADDRESS}
 #  3. If using the Angel release-train ONLY, give the process a unique instance id 
 #     so that multiple instances can register when running on SAME host.  This is
 #     not needed since release-train Brixton.
