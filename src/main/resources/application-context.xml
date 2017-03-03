@@ -6,13 +6,19 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans  
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
   
-  
+  <!--heroku postgresql-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" ></property>
+        <property name="url" value="jdbc:postgresql://ec2-54-163-246-165.compute-1.amazonaws.com:5432/d9ij37r795sn0q?username=tfcfjcrkgkcqfw&amp;password=f6ea567fd79a72fb5027b2c9992d32e7cb36cecc4c5ac48cecef10c4a16f0ecd&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory" ></property>  
+        <property name="username" value="tfcfjcrkgkcqfw" ></property>
+        <property name="password" value="f6ea567fd79a72fb5027b2c9992d32e7cb36cecc4c5ac48cecef10c4a16f0ecd" ></property>
+    </bean> 
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" ></property>
         <property name="url" value="jdbc:mysql://localhost/db_thread" ></property>  
         <property name="username" value="root" ></property>
         <property name="password" value="" ></property>
-    </bean>  
+    </bean>  -->
       
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -26,7 +32,8 @@
           
         <property name="hibernateProperties">
             <props>  
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>  
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>-->  
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.jdbc.batch_size">1000</prop>
