@@ -25,6 +25,7 @@ eureka:
     serviceUrl:
     #SERVER eureka https://username:password@appname.herokuapp.com
       defaultZone: ${EUREKA_SERVER}/eureka/
+#      defaultZone: http://admin:admin@localhost:8761/eureka/
   instance:
     instanceId: thread-service:${spring.application.instance_id:${random.value}}
     statusPageUrlPath: ${management.context-path}/info

@@ -1,48 +1,31 @@
-package com.hxline.threadservice.service;
+package com.hxline.threadservice.rest;
 
 import com.hxline.threadservice.domain.Comment;
-import com.hxline.threadservice.hibernate.ThreadHibernate;
 import com.hxline.threadservice.domain.Thread;
-import com.hxline.threadservice.domain.Thumb;
 import com.hxline.threadservice.dto.ThreadDTO;
-import com.hxline.threadservice.service.interfaced.ThreadInterface;
+import com.hxline.threadservice.services.interfaces.ThreadServicesInterface;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-//import org.apache.commons.codec.binary.Base64;
-//import org.apache.http.HttpHost;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import com.hxline.threadservice.rest.interfaces.ThreadRestInterface;
 
 /**
  *
  * @author Handoyo
  */
 @RestController
-public class ThreadService implements ThreadInterface{
+public class ThreadRest implements ThreadRestInterface{
 
-    @Value("${info.gateway}")
-    private String gateway_url;
+    @Autowired
+    private ThreadServicesInterface threadServices;
     
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
     @HystrixCommand(
@@ -56,29 +39,8 @@ public class ThreadService implements ThreadInterface{
             }
         )
     public ResponseEntity<List<ThreadDTO>> getAll() {
-        List<Thread> threads = context().getAll();
-        if (threads.size() > 0) {
-            RestTemplate restTemplate = new RestTemplate();
-            List<ThreadDTO> threadDTOs = new ArrayList();
-            Thumb response = new Thumb();
-            for (Thread thread : threads) {
-                try {
-                    response = restTemplate.getForObject(gateway_url + "/thumb-service/get/" + thread.getId(), Thumb.class);
-                    
-                } catch (Exception e) {
-                    System.out.println(e);
-                    response = new Thumb();
-                }
-                
-                threadDTOs.add(new ThreadDTO(
-                        thread.getId(),
-                        thread.getThreadTopic(),
-                        thread.getThreadDescription(),
-                        thread.getComments(),
-                        response
-                ));
-            }
-
+        List<ThreadDTO> threadDTOs = threadServices.getAll();
+        if (threadDTOs.size() > 0) {
             return new ResponseEntity(threadDTOs, HttpStatus.FOUND);
         } else {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -99,11 +61,11 @@ public class ThreadService implements ThreadInterface{
             commandProperties = @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000")
         )
     public ResponseEntity<Void> addThread(@RequestBody Thread thread) {
-        if (checkThread(thread.getId())) {
+        if (threadServices.get(thread.getId()) != null) {
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         } else {
             thread.setComments(null);
-            context().save(new Thread(UUID.randomUUID().toString(), thread.getThreadTopic(), thread.getThreadDescription(), thread.getComments()));
+            threadServices.save(new Thread(UUID.randomUUID().toString(), thread.getThreadTopic(), thread.getThreadDescription(), thread.getComments()));
             return new ResponseEntity(HttpStatus.CREATED);
         }
     }
@@ -122,17 +84,17 @@ public class ThreadService implements ThreadInterface{
             commandProperties = @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000")
         )
     public ResponseEntity<Void> addComment(@RequestBody Thread thread) {
-        if (checkThread(thread.getId())) {
-            Thread addThread = context().get(thread.getId());
+        Thread addThread = threadServices.get(thread.getId());
+        if (addThread == null) {
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        } else {
             for (Comment comment : thread.getComments()) {
                 comment.setId(UUID.randomUUID().toString());
                 addThread.getComments().add(comment);
             }
-            context().save(addThread);
+            threadServices.save(addThread);
 
             return new ResponseEntity(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         }
     }
     
@@ -141,22 +103,6 @@ public class ThreadService implements ThreadInterface{
         )
     public ResponseEntity<Void> addCommentFallback(@RequestBody Thread thread) {
         return new ResponseEntity(HttpStatus.REQUEST_TIMEOUT);
-    }
-
-    private Boolean checkThread(String id) {
-        Thread thread = context().get(id);
-        if (ObjectUtils.isEmpty(thread)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private ThreadHibernate context() {
-        Resource r = new ClassPathResource("application-context.xml");
-        BeanFactory factory = new XmlBeanFactory(r);
-        ThreadHibernate thread = (ThreadHibernate) factory.getBean("threadHibernate");
-        return thread;
     }
 
 //    private String getAddress() {

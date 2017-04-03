@@ -1,51 +1,33 @@
 package com.hxline.threadservice.hibernate;
 
-import com.hxline.threadservice.domain.Comment;
+import com.hxline.threadservice.component.HibernateRepository;
+import com.hxline.threadservice.hibernate.interfaces.ThreadHibernateInterface;
 import com.hxline.threadservice.domain.Thread;
+import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Handoyo
  */
+@Repository
 @Transactional
-public class ThreadHibernate {
-    private SessionFactory sessionFactory;
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+public class ThreadHibernate extends HibernateRepository implements ThreadHibernateInterface{
     
+    @Override
     public void save(Thread thread){
-        Session session = this.sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(thread);
-        transaction.commit();
-        session.close();
-        closeConnection();
+        getSession().saveOrUpdate(thread);
     }
     
+    @Override
     public List<Thread> getAll(){
-        Session session = this.sessionFactory.openSession();
-        List<Thread> threads = session.createQuery("FROM Thread").list();
-        session.close();
-        closeConnection();
-        return threads;
+        return new ArrayList(getSession().createQuery("FROM Thread").list());
     }
     
+    @Override
     public Thread get(String id){
-        Session session = this.sessionFactory.openSession();
-        Thread thread = (Thread) session.get(Thread.class, id);
-        session.close();
-        closeConnection();
-        return thread;
-    }
-    
-    private void closeConnection() {
-        sessionFactory.close();
+        return getSession().get(Thread.class, id);
     }
 }

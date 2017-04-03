@@ -1,7 +1,5 @@
-package com.hxline.threadservice.service.interfaced;
+package com.hxline.threadservice.rest.interfaces;
 
-import com.hxline.threadservice.domain.Comment;
-import com.hxline.threadservice.domain.Thumb;
 import com.hxline.threadservice.dto.ThreadDTO;
 import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Handoyo
  */
 @FeignClient("thread-service")
-public interface ThreadInterface {
+public interface ThreadRestInterface {
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
     public ResponseEntity<List<ThreadDTO>> getAll();
 
