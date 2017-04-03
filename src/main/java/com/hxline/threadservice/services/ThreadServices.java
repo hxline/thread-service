@@ -23,8 +23,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ThreadServices implements ThreadServicesInterface {
 
-    @Value("${info.gateway}")
-    private String gateway_url;
+//    @Value("${info.gateway}")
+    private String gateway_url = "https://hxline-gateway.herokuapp.com";
     
     private ThreadHibernateInterface threadHibernate;
 
