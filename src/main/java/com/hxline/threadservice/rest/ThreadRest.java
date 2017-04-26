@@ -40,7 +40,7 @@ public class ThreadRest implements ThreadRestInterface{
         )
     public ResponseEntity<List<ThreadDTO>> getAll() {
         List<ThreadDTO> threadDTOs = threadServices.getAll();
-        if (threadDTOs.size() > 0) {
+        if (threadDTOs != null) {
             return new ResponseEntity(threadDTOs, HttpStatus.FOUND);
         } else {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
