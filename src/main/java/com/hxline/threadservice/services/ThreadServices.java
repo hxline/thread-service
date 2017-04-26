@@ -12,7 +12,6 @@ import com.hxline.threadservice.hibernate.interfaces.ThreadHibernateInterface;
 import com.hxline.threadservice.services.interfaces.ThreadServicesInterface;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,8 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ThreadServices implements ThreadServicesInterface {
 
-    @Value("${info.gateway}")
-    private String gateway_url;
+    //get config variable from heroku
+    private String gateway_url = System.getenv("GATEWAY_ADDRESS");
     
     private ThreadHibernateInterface threadHibernate;
 
