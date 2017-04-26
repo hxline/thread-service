@@ -10,11 +10,14 @@ import com.hxline.threadservice.dto.ThreadDTO;
  * @author Handoyo
  */
 public interface ThreadServicesInterface {
+
     public void save(Thread thread);
-    
+
+    public void saveQueue(Thread thread);
+
     public List<ThreadDTO> getAll();
-    
+
     public Thread get(String id);
-    
+
     public Thumb getThumb(String id);
 }

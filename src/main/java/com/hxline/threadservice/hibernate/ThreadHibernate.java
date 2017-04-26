@@ -1,6 +1,7 @@
 package com.hxline.threadservice.hibernate;
 
 import com.hxline.threadservice.component.HibernateRepository;
+import com.hxline.threadservice.messaging.publisher.ThreadPublisher;
 import com.hxline.threadservice.hibernate.interfaces.ThreadHibernateInterface;
 import com.hxline.threadservice.domain.Thread;
 import java.util.ArrayList;
@@ -16,8 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ThreadHibernate extends HibernateRepository implements ThreadHibernateInterface{
     
+    private ThreadPublisher threadPublisher;
+
+    public void setThreadPublisher(ThreadPublisher threadPublisher) {
+        this.threadPublisher = threadPublisher;
+    }
+    
     @Override
     public void save(Thread thread){
+        getSession().saveOrUpdate(thread);
+        threadPublisher.send(thread);
+    }
+    
+    @Override
+    public void saveQueue(Thread thread){
         getSession().saveOrUpdate(thread);
     }
     

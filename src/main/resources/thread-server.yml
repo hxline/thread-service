@@ -48,3 +48,14 @@ info:
 #     NOTE-2: Syntax ${x:${y}} = use $x if set, otherwise use $y
 #   metadataMap:
 #     instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+#logging:
+#  level:
+##    ROOT: DEBUG
+##    org.springframework.web: ERROR
+#    com.hxline: DEBUG
+##  pattern:
+##    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+##    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+##java.io.tmpdir = C:\Users\user\AppData\Local\Temp\
+##bisa juga di set environment TEMP ke directory lain seperti C:\TEMP\
+#  file: ${java.io.tmpdir}/thread-service.log

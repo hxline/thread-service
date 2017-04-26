@@ -23,8 +23,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ThreadServices implements ThreadServicesInterface {
 
-//    @Value("${info.gateway}")
-    private String gateway_url = "https://hxline-gateway.herokuapp.com";
+    @Value("${info.gateway}")
+    private String gateway_url;
     
     private ThreadHibernateInterface threadHibernate;
 
@@ -36,6 +36,15 @@ public class ThreadServices implements ThreadServicesInterface {
     public void save(Thread thread) {
         if (this.get(thread.getId()) == null) {
             threadHibernate.save(thread);
+        } else {
+            throw new RuntimeException("Thread Has Been Existed");
+        }
+    }
+    
+    @Override
+    public void saveQueue(Thread thread) {
+        if (this.get(thread.getId()) == null) {
+            threadHibernate.saveQueue(thread);
         } else {
             throw new RuntimeException("Thread Has Been Existed");
         }

@@ -10,11 +10,45 @@
                            http://www.springframework.org/schema/jdbc 
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
+    <!--Eureka Instance-->
+    <bean id="eurekaInstance" class="com.hxline.threadservice.component.EurekaInstance" />
+    
+    <!--properties location-->
     <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>jdbc.properties</value>
+                <value>mbc.properties</value>
             </list>
+        </property>
+    </bean>
+    
+    <!--RabbitMQ Connection and instance id-->
+    <bean id="connectionFactory" class="com.rabbitmq.client.ConnectionFactory">
+<!--        <property name="host" value="${rabbitmq.host}" />
+        <property name="username" value="${rabbitmq.username}" />
+        <property name="password" value="${rabbitmq.password}" />-->
+        <property name="uri" value="${rabbitmq.uri}" />
+        <property name="requestedHeartbeat" value="${rabbitmq.requestedHeartbeat}" />
+        <property name="connectionTimeout" value="${rabbitmq.connectionTimeout}" />
+    </bean>
+    
+    <bean id="threadServer" class="com.hxline.threadservice.register.ThreadServer">
+        <property name="threadConsumer" ref="threadConsumer" />
+    </bean>
+    
+    <bean id="threadConsumer" class="com.hxline.threadservice.messaging.consumer.ThreadConsumer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="threadServices" ref="threadServices" />
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+        </property>
+    </bean>
+    
+    <bean id="threadPublisher" class="com.hxline.threadservice.messaging.publisher.ThreadPublisher">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="serviceInstance">
+            <bean factory-bean="eurekaInstance" factory-method="getHost" />
         </property>
     </bean>
     
@@ -45,6 +79,7 @@
     <!-- Repository Handler -->
     <bean id="threadHibernate" class="com.hxline.threadservice.hibernate.ThreadHibernate">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="threadPublisher" ref="threadPublisher"/>
     </bean>
     
     <!--Services Handler-->
