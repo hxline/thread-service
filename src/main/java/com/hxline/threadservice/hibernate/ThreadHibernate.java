@@ -26,7 +26,10 @@ public class ThreadHibernate extends HibernateRepository implements ThreadHibern
     @Override
     public void save(Thread thread){
         getSession().saveOrUpdate(thread);
+        //send to another thread service
         threadPublisher.send(thread);
+        //send to all thumbservice to create thumb with this threadId
+        threadPublisher.send(thread.getId());
     }
     
     @Override
