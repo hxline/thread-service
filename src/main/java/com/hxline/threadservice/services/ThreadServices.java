@@ -33,20 +33,20 @@ public class ThreadServices implements ThreadServicesInterface {
     
     @Override
     public void save(Thread thread) {
-        if (this.get(thread.getId()) == null) {
+//        if (this.get(thread.getId()) == null) {
             threadHibernate.save(thread);
-        } else {
-            throw new RuntimeException("Thread Has Been Existed");
-        }
+//        } else {
+//            throw new RuntimeException("Thread Has Been Existed");
+//        }
     }
     
     @Override
     public void saveQueue(Thread thread) {
-        if (this.get(thread.getId()) == null) {
+//        if (this.get(thread.getId()) == null) {
             threadHibernate.saveQueue(thread);
-        } else {
-            throw new RuntimeException("Thread Has Been Existed");
-        }
+//        } else {
+//            throw new RuntimeException("Thread Has Been Existed");
+//        }
     }
 
     @Override
