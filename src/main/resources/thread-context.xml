@@ -34,21 +34,21 @@
     </bean>
     
     <bean id="threadServer" class="com.hxline.threadservice.register.ThreadServer">
-        <property name="threadConsumer" ref="threadConsumer" />
+        <property name="threadSubscriber" ref="threadSubscriber" />
     </bean>
     
-    <bean id="threadConsumer" class="com.hxline.threadservice.messaging.consumer.ThreadConsumer">
+    <bean id="threadSubscriber" class="com.hxline.threadservice.messaging.subscriber.ThreadSubscriber">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="threadServices" ref="threadServices" />
         <property name="serviceInstance">
-            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
         </property>
     </bean>
     
     <bean id="threadPublisher" class="com.hxline.threadservice.messaging.publisher.ThreadPublisher">
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="serviceInstance">
-            <bean factory-bean="eurekaInstance" factory-method="getHost" />
+            <bean factory-bean="eurekaInstance" factory-method="getServiceId" />
         </property>
     </bean>
     

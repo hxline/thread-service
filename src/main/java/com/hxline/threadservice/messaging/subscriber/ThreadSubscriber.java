@@ -1,4 +1,4 @@
-package com.hxline.threadservice.messaging.consumer;
+package com.hxline.threadservice.messaging.subscriber;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hxline.threadservice.domain.Thread;
@@ -14,7 +14,7 @@ import com.rabbitmq.client.QueueingConsumer.Delivery;
  *
  * @author Handoyo
  */
-public class ThreadConsumer {
+public class ThreadSubscriber {
     
     private String serviceInstance;
     private ThreadServicesInterface threadServices;
