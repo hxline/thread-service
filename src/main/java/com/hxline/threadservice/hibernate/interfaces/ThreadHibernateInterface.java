@@ -9,7 +9,7 @@ import com.hxline.threadservice.domain.Thread;
  */
 public interface ThreadHibernateInterface {
 
-    public void save(Thread thread);
+    public void save(Thread thread, Boolean newThread);
 
     public void saveQueue(Thread thread);
 

@@ -65,7 +65,7 @@ public class ThreadRest implements ThreadRestInterface{
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         } else {
             thread.setComments(null);
-            threadServices.save(new Thread(UUID.randomUUID().toString(), thread.getThreadTopic(), thread.getThreadDescription(), thread.getComments()));
+            threadServices.save(new Thread(UUID.randomUUID().toString(), thread.getThreadTopic(), thread.getThreadDescription(), thread.getComments()), true);
             return new ResponseEntity(HttpStatus.CREATED);
         }
     }
@@ -92,7 +92,7 @@ public class ThreadRest implements ThreadRestInterface{
                 comment.setId(UUID.randomUUID().toString());
                 addThread.getComments().add(comment);
             }
-            threadServices.save(addThread);
+            threadServices.save(addThread, false);
 
             return new ResponseEntity(HttpStatus.CREATED);
         }

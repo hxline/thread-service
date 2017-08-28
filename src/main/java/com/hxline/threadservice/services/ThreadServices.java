@@ -32,9 +32,9 @@ public class ThreadServices implements ThreadServicesInterface {
     }
     
     @Override
-    public void save(Thread thread) {
+    public void save(Thread thread, Boolean newThread) {
 //        if (this.get(thread.getId()) == null) {
-            threadHibernate.save(thread);
+            threadHibernate.save(thread, newThread);
 //        } else {
 //            throw new RuntimeException("Thread Has Been Existed");
 //        }

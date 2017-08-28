@@ -11,7 +11,7 @@ import com.hxline.threadservice.dto.ThreadDTO;
  */
 public interface ThreadServicesInterface {
 
-    public void save(Thread thread);
+    public void save(Thread thread, Boolean newThread);
 
     public void saveQueue(Thread thread);
 
